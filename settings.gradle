@@ -1,0 +1,5 @@
+rootProject.name = 'u2-SustainabilityShipmentService'
+include(':SustainabilityShipmentServiceLambda',
+        ':SustainabilityShipmentServiceTCTs',
+        ':list',
+        ':utilities')

@@ -1,0 +1,22 @@
+@startuml
+title Sustainable Shipment Service Sequence Diagram
+actor FC
+participant PrepareShipmentActivity
+participant ShipmentService
+participant CostStrategy
+participant PackagingDAO
+participant Packaging
+
+FC -> PrepareShipmentActivity : handleRequest(PrepareShipmentRequest)
+PrepareShipmentActivity -> ShipmentService: findShipmentOption(Item, FulfillmentCenter)
+ShipmentService -> PackagingDAO: findShipmentOptions(Item, FulfillmentCenter)
+
+loop List of all FcPackagingOptions
+  PackagingDAO -> Packaging: canFitItem(Item)
+  PackagingDAO <-- Packaging: boolean
+  opt Item fits in Packaging
+    PackagingDAO -> PackagingDAO: add to result
+  end
+end
+
+@enduml

@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sustanabile Shipment Service 
+
+Globals:
+  Function:
+    Timeout: 20
+    Tracing: Active
+  Api:
+    TracingEnabled: True
+
+Resources:
+  SustainableShipmentService:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: SustainabilityShipmentServiceLambda
+      Handler: com.nashss.se.sustainabilityshipmentservice.lambda.PrepareShipmentServiceLambda::handleRequest
+      Runtime: java11
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Environment:
+        Variables:
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+      Events:
+        SustainableShipmentService:
+          Type: Api
+          Properties:
+            Path: /shipments
+            Method: get
