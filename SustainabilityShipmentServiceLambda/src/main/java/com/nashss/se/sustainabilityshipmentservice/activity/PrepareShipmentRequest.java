@@ -89,5 +89,16 @@ public class PrepareShipmentRequest {
         public PrepareShipmentRequest build() {
             return new PrepareShipmentRequest(fcCode, itemAsin, itemDescription, itemLength, itemWidth, itemHeight);
         }
+        @Override
+        public String toString() {
+            return "PrepareShipmentRequest{" +
+                    "fcCode='" + fcCode + '\'' +
+                    ", itemAsin='" + itemAsin + '\'' +
+                    ", itemDescription='" + itemDescription + '\'' +
+                    ", itemLength='" + itemLength + '\'' +
+                    ", itemWidth='" + itemWidth + '\'' +
+                    ", itemHeight='" + itemHeight + '\'' +
+                    '}';
+        }
     }
 }

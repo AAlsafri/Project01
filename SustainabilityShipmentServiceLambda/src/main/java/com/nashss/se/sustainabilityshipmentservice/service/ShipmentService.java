@@ -1,11 +1,15 @@
 package com.nashss.se.sustainabilityshipmentservice.service;
 
+import com.nashss.se.sustainabilityshipmentservice.activity.PrepareShipmentRequest;
 import com.nashss.se.sustainabilityshipmentservice.cost.CostStrategy;
 import com.nashss.se.sustainabilityshipmentservice.dao.PackagingDAO;
 import com.nashss.se.sustainabilityshipmentservice.types.FulfillmentCenter;
 import com.nashss.se.sustainabilityshipmentservice.types.Item;
 import com.nashss.se.sustainabilityshipmentservice.types.ShipmentCost;
 import com.nashss.se.sustainabilityshipmentservice.types.ShipmentOption;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +21,7 @@ import java.util.List;
  */
 public class ShipmentService {
 
+    private static final Logger logger = LogManager.getLogger(ShipmentService.class);
     /**
      * PackagingDAO is used to retrieve all valid shipment options for a given fulfillment center and item.
      */
@@ -45,9 +50,24 @@ public class ShipmentService {
      */
     public ShipmentOption findShipmentOption(final Item item, final FulfillmentCenter fulfillmentCenter) {
         try {
+            //logger.info("Finding shipment option with inputs - Item: {}, FulfillmentCenter: {}", item, fulfillmentCenter);
+
+            PrepareShipmentRequest prepareShipmentRequest = PrepareShipmentRequest.builder()
+                    .withFcCode(fulfillmentCenter.getFcCode())
+                    .withItemAsin(item.getAsin())
+                    .withItemDescription(item.getDescription())
+                    .withItemLength(item.getLength().toString()) // Convert BigDecimal to String
+                    .withItemWidth(item.getWidth().toString())   // Convert BigDecimal to String
+                    .withItemHeight(item.getHeight().toString()) // Convert BigDecimal to String
+                    .build();
+
+            logger.info("Finding shipment option with inputs - Item: {}, FulfillmentCenter: {}", item, fulfillmentCenter);
+            logger.debug("PrepareShipmentRequest: {}", prepareShipmentRequest);
+
             List<ShipmentOption> results = this.packagingDAO.findShipmentOptions(item, fulfillmentCenter);
             return getLowestCostShipmentOption(results);
         } catch (Exception e) {
+            logger.error("Error finding shipment option", e);
             return null;
         }
     }
