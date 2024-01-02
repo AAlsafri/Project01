@@ -1,22 +1,72 @@
 @startuml
 title Sustainable Shipment Service Sequence Diagram
+
 actor FC
 participant PrepareShipmentActivity
+participant LambdaRequest
+participant PrepareShipmentRequest
 participant ShipmentService
-participant CostStrategy
 participant PackagingDAO
+participant FulfillmentCenter
+participant Item
 participant Packaging
+participant ShipmentOption
+participant ShipmentCost
+participant CostStrategy
+participant LambdaResponse
+participant PrepareShipmentResponse
 
-FC -> PrepareShipmentActivity : handleRequest(PrepareShipmentRequest)
-PrepareShipmentActivity -> ShipmentService: findShipmentOption(Item, FulfillmentCenter)
-ShipmentService -> PackagingDAO: findShipmentOptions(Item, FulfillmentCenter)
+== Request Flow ==
+
+FC -> PrepareShipmentActivity : handleRequest(LambdaRequest<PrepareShipmentRequest>)
+Activate PrepareShipmentActivity
+
+PrepareShipmentActivity -> LambdaRequest : fromQuery(MapToPojoConverter<T>)
+Activate LambdaRequest
+
+LambdaRequest -> PrepareShipmentRequest : builder().withFcCode(fcCode)...
+Activate PrepareShipmentRequest
+
+PrepareShipmentRequest -> ShipmentService : handleRequest(PrepareShipmentRequest)
+Activate ShipmentService
+
+== Shipment Processing ==
+
+ShipmentService -> PackagingDAO : findShipmentOptions(Item, FulfillmentCenter)
+Activate PackagingDAO
 
 loop List of all FcPackagingOptions
-  PackagingDAO -> Packaging: canFitItem(Item)
-  PackagingDAO <-- Packaging: boolean
-  opt Item fits in Packaging
-    PackagingDAO -> PackagingDAO: add to result
-  end
+  PackagingDAO -> Packaging : canFitItem(Item)
+  Activate Packaging
+
+  PackagingDAO <-- Packaging : boolean
+  PackagingDAO -> PackagingDAO : add to result (if item fits)
 end
 
+PackagingDAO --> ShipmentService : List<ShipmentOption>
+Destroy PackagingDAO
+
+ShipmentService -> ShipmentService : getLowestCostShipmentOption(results)
+ShipmentService -> CostStrategy : getCost(option)
+Activate CostStrategy
+
+CostStrategy --> ShipmentService : ShipmentCost
+Destroy CostStrategy
+
+ShipmentService -> LambdaResponse : success(PrepareShipmentResponse)
+Activate LambdaResponse
+
+LambdaResponse -> PrepareShipmentResponse : builder().withDetails(...)
+Activate PrepareShipmentResponse
+
+== Response Flow ==
+
+LambdaResponse --> FC : Response
+
+Destroy LambdaResponse
+Destroy PrepareShipmentResponse
+Destroy ShipmentService
+Destroy PrepareShipmentRequest
+Destroy LambdaRequest
+Destroy PrepareShipmentActivity
 @enduml

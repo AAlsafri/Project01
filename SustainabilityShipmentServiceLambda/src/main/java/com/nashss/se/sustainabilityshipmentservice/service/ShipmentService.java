@@ -44,10 +44,6 @@ public class ShipmentService {
      * @return the lowest cost shipment option for the item and fulfillment center, or null if none found
      */
     public ShipmentOption findShipmentOption(final Item item, final FulfillmentCenter fulfillmentCenter) {
-        if (item.getAsin().contentEquals(anasin)) {
-            return null;
-        }
-
         try {
             List<ShipmentOption> results = this.packagingDAO.findShipmentOptions(item, fulfillmentCenter);
             return getLowestCostShipmentOption(results);
