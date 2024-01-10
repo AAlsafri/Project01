@@ -71,6 +71,7 @@ public class BoxTest {
         assertFalse(canFit, "Item with longer height than package should not fit in the package.");
     }
 
+    //TODO
     @Test
     public void canFitItem_itemSameSizeAsBox_doesNotFit() {
         // GIVEN
