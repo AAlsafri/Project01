@@ -1,5 +1,7 @@
 package com.nashss.se.sustainabilityshipmentservice.types;
 
+import java.util.Objects;
+
 /**
  * Represents a pairing between a packaging option and a fulfillment center that supports that packaging option.
  */
@@ -31,6 +33,21 @@ public class FcPackagingOption {
     }
 
     public Packaging getPackaging() {
+
         return packaging;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        FcPackagingOption that = (FcPackagingOption) obj;
+        return Objects.equals(fulfillmentCenter, that.fulfillmentCenter) &&
+                Objects.equals(packaging, that.packaging);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fulfillmentCenter, packaging);
     }
 }

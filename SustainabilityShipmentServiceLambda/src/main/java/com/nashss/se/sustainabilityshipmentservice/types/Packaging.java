@@ -1,6 +1,7 @@
 package com.nashss.se.sustainabilityshipmentservice.types;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Represents a packaging option.
@@ -40,4 +41,17 @@ public abstract class Packaging {
      * @return the mass of the packaging
      */
     public abstract BigDecimal getMass();
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Packaging packaging = (Packaging) obj;
+        return material == packaging.material;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(material);
+    }
 }

@@ -1,5 +1,7 @@
 package com.nashss.se.sustainabilityshipmentservice.types;
 
+import java.util.Objects;
+
 /**
  * Represents an Amazon fulfillment center.
  *
@@ -17,10 +19,24 @@ public class FulfillmentCenter {
      * @param fcCode - the unique identifier for the new fulfillment center
      */
     public FulfillmentCenter(String fcCode) {
+
         this.fcCode = fcCode;
     }
 
     public String getFcCode() {
         return fcCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        FulfillmentCenter that = (FulfillmentCenter) obj;
+        return Objects.equals(fcCode, that.fcCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fcCode);
     }
 }
