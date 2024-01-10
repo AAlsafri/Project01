@@ -49,24 +49,21 @@ public class ShipmentOption {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        ShipmentOption other = (ShipmentOption) o;
-        return item.equals(other.item) &&
-            packaging.equals(other.packaging) &&
-            fulfillmentCenter.equals(other.fulfillmentCenter);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ShipmentOption that = (ShipmentOption) obj;
+        return Objects.equals(packaging, that.packaging) &&
+                Objects.equals(item, that.item) &&
+                Objects.equals(fulfillmentCenter, that.fulfillmentCenter);
     }
+
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(item, packaging, fulfillmentCenter);
+        // Implement hashCode considering all relevant fields
+        return Objects.hash(item, fulfillmentCenter, packaging);
     }
 
     /**

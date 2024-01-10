@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -111,7 +112,12 @@ public class BoxTest {
         BigDecimal mass = box.getMass();
 
         // THEN
-        assertEquals(BigDecimal.valueOf(1000), mass,
-                "Item smaller than the box should fit in the package.");
+        System.out.println("Actual Mass: " + mass); // Add this line
+
+        // Adjust the scale of the expected value to match the scale of the actual value
+        BigDecimal expectedMass = BigDecimal.valueOf(1000).setScale(mass.scale(), RoundingMode.UNNECESSARY);
+
+        assertEquals(expectedMass, mass, "Item smaller than the box should fit in the package.");
     }
+
 }

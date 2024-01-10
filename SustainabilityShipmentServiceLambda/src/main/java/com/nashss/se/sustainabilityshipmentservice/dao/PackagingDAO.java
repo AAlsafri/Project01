@@ -47,6 +47,7 @@ public class PackagingDAO {
         // Check all FcPackagingOptions for a suitable Packaging in the given FulfillmentCenter
         List<ShipmentOption> result = new ArrayList<>();
         boolean fcFound = false;
+
         for (FcPackagingOption fcPackagingOption : fcPackagingOptions) {
             Packaging packaging = fcPackagingOption.getPackaging();
             String fcCode = fcPackagingOption.getFulfillmentCenter().getFcCode();
@@ -63,7 +64,6 @@ public class PackagingDAO {
             }
         }
 
-        // Notify caller about unexpected results
         if (!fcFound) {
             throw new UnknownFulfillmentCenterException(
                     String.format("Unknown FC: %s!", fulfillmentCenter.getFcCode()));

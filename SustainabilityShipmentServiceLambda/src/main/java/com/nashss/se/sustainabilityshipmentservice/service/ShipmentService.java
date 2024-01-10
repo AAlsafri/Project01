@@ -3,6 +3,7 @@ package com.nashss.se.sustainabilityshipmentservice.service;
 import com.nashss.se.sustainabilityshipmentservice.activity.PrepareShipmentRequest;
 import com.nashss.se.sustainabilityshipmentservice.cost.CostStrategy;
 import com.nashss.se.sustainabilityshipmentservice.dao.PackagingDAO;
+import com.nashss.se.sustainabilityshipmentservice.exceptions.NoPackagingFitsItemException;
 import com.nashss.se.sustainabilityshipmentservice.types.FulfillmentCenter;
 import com.nashss.se.sustainabilityshipmentservice.types.Item;
 import com.nashss.se.sustainabilityshipmentservice.types.ShipmentCost;
@@ -72,11 +73,16 @@ public class ShipmentService {
         }
     }
 
-    private ShipmentOption getLowestCostShipmentOption(List<ShipmentOption> results) {
+    private ShipmentOption getLowestCostShipmentOption(List<ShipmentOption> results) throws NoPackagingFitsItemException {
+        if (results.isEmpty()) {
+            throw new NoPackagingFitsItemException("No packaging options available for the given item and fulfillment center.");
+        }
+
         List<ShipmentCost> shipmentCosts = applyCostStrategy(results);
         Collections.sort(shipmentCosts);
         return shipmentCosts.get(0).getShipmentOption();
     }
+
 
     private List<ShipmentCost> applyCostStrategy(List<ShipmentOption> results) {
         List<ShipmentCost> shipmentCosts = new ArrayList<>();

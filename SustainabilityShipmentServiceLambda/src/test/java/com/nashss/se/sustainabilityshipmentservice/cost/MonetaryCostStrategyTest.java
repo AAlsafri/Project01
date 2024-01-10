@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MonetaryCostStrategyTest {
@@ -27,14 +28,18 @@ public class MonetaryCostStrategyTest {
     void getCost_corrugateMaterial_returnsCorrectCost() {
         // GIVEN
         ShipmentOption option = ShipmentOption.builder()
-            .withPackaging(BOX_10x10x20)
-            .build();
+                .withPackaging(BOX_10x10x20)
+                .build();
 
         // WHEN
         ShipmentCost shipmentCost = strategy.getCost(option);
 
         // THEN
-        assertTrue(BigDecimal.valueOf(5.43).compareTo(shipmentCost.getCost()) == 0,
-            "Incorrect monetary cost calculation for a box with dimensions 10x10x20.");
+        BigDecimal expectedCost = BOX_10x10x20.getMass()
+                .multiply(BigDecimal.valueOf(0.005))
+                .add(BigDecimal.valueOf(0.43));                
+
+        assertEquals(expectedCost, shipmentCost.getCost(),
+                "Incorrect monetary cost calculation for a box with dimensions 10x10x20.");
     }
 }

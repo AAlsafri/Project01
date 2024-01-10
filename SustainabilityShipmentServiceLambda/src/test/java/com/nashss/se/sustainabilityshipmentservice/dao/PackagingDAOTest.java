@@ -59,8 +59,8 @@ class PackagingDAOTest {
 
         // THEN
         assertEquals(1, shipmentOptions.size(),
-            "When fulfillment center has packaging that can fit item, return a ShipmentOption with the item, "
-                + "fulfillment center, and packaging that can fit the item.");
+                "When fulfillment center has packaging that can fit item, return a ShipmentOption with the item, "
+                        + "fulfillment center, and packaging that can fit the item.");
     }
 
     @Test
@@ -73,10 +73,9 @@ class PackagingDAOTest {
 
         // THEN
         assertEquals(1, shipmentOptions.size(),
-            "When fulfillment center has packaging that can fit item, return a ShipmentOption with the item, "
-                + "fulfillment center, and packaging that can fit the item.");
+                "When fulfillment center has packaging that can fit item, return a ShipmentOption with the item, "
+                        + "fulfillment center, and packaging that can fit the item.");
     }
-
     @Test
     public void findShipmentOptions_twoPackagingAvailableAndBothFit_twoPackagingOptions() throws Exception {
         // GIVEN
@@ -87,9 +86,11 @@ class PackagingDAOTest {
 
         // THEN
         assertEquals(2, shipmentOptions.size(),
-            "When fulfillment center has multiple packaging that can fit item, return a ShipmentOption "
-                + "for each.");
+                "When fulfillment center has multiple packaging that can fit item, return a ShipmentOption "
+                        + "for each.");
     }
+
+
 
     private Item createItem(String length, String width, String height) {
         return Item.builder()

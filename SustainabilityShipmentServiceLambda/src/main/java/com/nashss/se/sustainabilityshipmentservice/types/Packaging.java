@@ -14,10 +14,11 @@ public abstract class Packaging {
     /**
      * The material this packaging is made of.
      */
-    private Material material;
+    private final Material material;
 
     /**
      * Instantiates a new Packaging object.
+     *
      * @param material - the Material of the package
      */
     public Packaging(Material material) {
@@ -36,8 +37,11 @@ public abstract class Packaging {
      */
     public abstract boolean canFitItem(Item item);
 
+    protected abstract boolean compareDimensions(Packaging otherPackaging);
+
     /**
      * Returns the mass of the packaging in grams.
+     *
      * @return the mass of the packaging
      */
     public abstract BigDecimal getMass();
@@ -47,7 +51,7 @@ public abstract class Packaging {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Packaging packaging = (Packaging) obj;
-        return material == packaging.material;
+        return material == packaging.material && compareDimensions((Packaging) obj);
     }
 
     @Override

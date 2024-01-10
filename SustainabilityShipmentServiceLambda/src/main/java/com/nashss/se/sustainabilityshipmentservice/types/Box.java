@@ -7,27 +7,10 @@ import java.math.BigDecimal;
  */
 public class Box extends Packaging {
 
-    /**
-     * This box's length.
-     */
     private BigDecimal length;
-
-    /**
-     * This box's smallest dimension.
-     */
     private BigDecimal width;
-
-    /**
-     * This box's largest dimension.
-     */
     private BigDecimal height;
 
-    /**
-     * Instantiates a new Box object.
-     * @param length - the length of the box
-     * @param width - the width of the box
-     * @param height - the height of the box
-     */
     public Box(BigDecimal length, BigDecimal width, BigDecimal height) {
         super(Material.CORRUGATE);
         this.length = length;
@@ -35,36 +18,40 @@ public class Box extends Packaging {
         this.height = height;
     }
 
-    public BigDecimal getLength() {
-        return length;
-    }
-
-    public BigDecimal getWidth() {
-        return width;
-    }
-
-    public BigDecimal getHeight() {
-        return height;
+    @Override
+    protected boolean compareDimensions(Packaging otherPackaging) {
+        if (otherPackaging instanceof Box) {
+            Box otherBox = (Box) otherPackaging;
+            return length.equals(otherBox.length) && width.equals(otherBox.width) && height.equals(otherBox.height);
+        }
+        return false;
     }
 
     @Override
     public boolean canFitItem(Item item) {
-        return this.length.compareTo(item.getLength()) > 0 &&
-                this.width.compareTo(item.getWidth()) > 0 &&
-                this.height.compareTo(item.getHeight()) > 0;
+        // Check if each dimension of the item is strictly less than the corresponding dimension of the box
+        boolean fitsLength = item.getLength().compareTo(length) < 0;
+        boolean fitsWidth = item.getWidth().compareTo(width) < 0;
+        boolean fitsHeight = item.getHeight().compareTo(height) < 0;
+
+        // The item can fit if it's smaller in all dimensions
+        return fitsLength && fitsWidth && fitsHeight;
     }
+
+
 
     @Override
     public BigDecimal getMass() {
-        BigDecimal two = BigDecimal.valueOf(2);
+        // Calculate the volume of the box (length * width * height)
+        BigDecimal volume = length.multiply(width).multiply(height);
 
-        // For simplicity, we ignore overlapping flaps
-        BigDecimal endsArea = length.multiply(width).multiply(two);
-        BigDecimal shortSidesArea = length.multiply(height).multiply(two);
-        BigDecimal longSidesArea = width.multiply(height).multiply(two);
+        // Assuming density of the material is 0.5 (adjust as needed)
+        BigDecimal density = new BigDecimal("0.5");
 
-        return endsArea.add(shortSidesArea).add(longSidesArea);
+        // Calculate the mass using the density
+        return volume.multiply(density);
     }
+
 
     @Override
     public String toString() {

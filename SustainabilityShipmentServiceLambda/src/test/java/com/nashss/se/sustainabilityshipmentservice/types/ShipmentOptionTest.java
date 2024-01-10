@@ -1,5 +1,7 @@
 package com.nashss.se.sustainabilityshipmentservice.types;
 
+import com.nashss.se.sustainabilityshipmentservice.types.Packaging;
+
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -126,12 +128,17 @@ class ShipmentOptionTest {
             .withPackaging(otherPackaging)
             .build();
 
+        // DEBUG
+        System.out.println("shipmentOption: " + shipmentOption);
+        System.out.println("other: " + other);
+
         // WHEN
         boolean isEqual = shipmentOption.equals(other);
 
         // THEN
         assertFalse(isEqual, "ShipmentOptions with different packaging are not equal.");
     }
+
 
     @Test
     public void hashCode_equalObjects_equalHash() {
